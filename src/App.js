@@ -39,29 +39,70 @@ export default function App() {
 			],
 		},
 	];
+	const [currentQuestion, setCurrentQuestion] = useState(0)
+	const [quizComplete, setQuizComplete] = useState(false)
+	const [score, setScore] = useState(0)
+	const [pastScores, setPastScores] = useState([])
+	function handleAnswerClick(option){
+		const nextQuestion = currentQuestion + 1
 
+		if(option.isCorrect){
+			setScore(prev => prev+1)
+		}
+
+		if(nextQuestion < questions.length){
+			setCurrentQuestion(nextQuestion)
+		}
+		else{
+			setQuizComplete(true)
+		}
+	}
+	function handleResetClick(){
+		setCurrentQuestion(0)
+		setScore(0)
+		if(quizComplete){
+			const scoreList = [...pastScores, score]
+			setPastScores(scoreList)
+		}
+		setQuizComplete(false)
+	}
+
+	function ResetButton(){
+		return(
+			<button className='resetQuizBtn' onClick={handleResetClick}>Reset Quiz</button>
+		)
+	}
 	return (
 		<div className='app'>
-			{/* HINT: replace "false" with logic to display the 
-      score when the user has answered all the questions */}
-			{false ? (
-				<div className='score-section'>You scored 1 out of {questions.length}</div>
+			{quizComplete ? (
+				<div className='score-section'>
+					You scored {score} out of {questions.length}
+					<ResetButton />
+				</div>
+				
 			) : (
 				<>
 					<div className='question-section'>
 						<div className='question-count'>
-							<span>Question 1</span>/{questions.length}
+							<span>Question {currentQuestion +1}</span>/{questions.length}
 						</div>
-						<div className='question-text'>This is where the question text should go</div>
+						<div className='question-text'>
+							{questions[currentQuestion].questionText}
+						</div>
+						<ResetButton />
+						<div>
+							<h3>Past Scores</h3>
+							<ul>
+								{pastScores.length > 0 && pastScores.map(score=> <li>{score}</li>)}
+							</ul>
+						</div>
 					</div>
 					<div className='answer-section'>
-						<button>Answer 1</button>
-						<button>Answer 2</button>
-						<button>Answer 3</button>
-						<button>Answer 4</button>
+						{questions[currentQuestion].answerOptions.map(option => <button onClick={() => handleAnswerClick(option)}>{option.answerText}</button>)}
 					</div>
 				</>
-			)}
+				)
+			}
 		</div>
 	);
 }

@@ -35,12 +35,18 @@ body {
   display: flex;
   font-size: 24px;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
 }
 
 /* QUESTION/TIMER/LEFT SECTION */
 .question-section {
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .question-count {
@@ -105,4 +111,9 @@ button:focus {
 
 button svg {
   margin-right: 5px;
+}
+
+.resetQuizBtn{
+  width: 8em;
+
 }
